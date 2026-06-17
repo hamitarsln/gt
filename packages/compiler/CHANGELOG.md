@@ -1,5 +1,15 @@
 # @generaltranslation/compiler
 
+## 1.3.25-odysseus.0
+
+### Patch Changes
+
+- [#1508](https://github.com/generaltranslation/gt/pull/1508) [`cc1499d`](https://github.com/generaltranslation/gt/commit/cc1499d12789ffd7ee3c6ca20d2eec734a1c9575) Thanks [@ErnestM1234](https://github.com/ErnestM1234)! - Trigger an odysseus prerelease patch for all publishable packages.
+
+- Updated dependencies [[`cc1499d`](https://github.com/generaltranslation/gt/commit/cc1499d12789ffd7ee3c6ca20d2eec734a1c9575)]:
+  - @generaltranslation/format@0.1.2-odysseus.0
+  - generaltranslation@8.2.17-odysseus.0
+
 ## 1.3.24
 
 ### Patch Changes
