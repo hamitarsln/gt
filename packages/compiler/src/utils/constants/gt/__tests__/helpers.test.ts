@@ -3,10 +3,16 @@ import {
   isGTComponent,
   isVariableComponent,
   isDeriveComponent,
+  isGTImportSource,
+  isGTReactImportSource,
   defaultVariableNames,
   getVariableName,
 } from '../helpers';
-import { GT_COMPONENT_TYPES, MINIFY_CANONICAL_NAME_MAP } from '../constants';
+import {
+  GT_COMPONENT_TYPES,
+  GT_IMPORT_SOURCES,
+  MINIFY_CANONICAL_NAME_MAP,
+} from '../constants';
 
 describe('isGTComponent', () => {
   it('should recognize all variable components', () => {
@@ -96,5 +102,19 @@ describe('getVariableName', () => {
   it('should return default name for RelativeTime when no name provided', () => {
     const result = getVariableName(GT_COMPONENT_TYPES.RelativeTime, 1);
     expect(result).toContain('time');
+  });
+});
+
+describe('GT import sources', () => {
+  it('recognizes root and legacy gt-react subpaths', () => {
+    expect(isGTImportSource(GT_IMPORT_SOURCES.GT_REACT)).toBe(true);
+    expect(isGTImportSource(GT_IMPORT_SOURCES.GT_REACT_BROWSER)).toBe(true);
+    expect(isGTImportSource(GT_IMPORT_SOURCES.GT_REACT_CLIENT)).toBe(true);
+    expect(isGTReactImportSource(GT_IMPORT_SOURCES.GT_REACT)).toBe(true);
+    expect(isGTReactImportSource(GT_IMPORT_SOURCES.GT_REACT_BROWSER)).toBe(
+      true
+    );
+    expect(isGTReactImportSource(GT_IMPORT_SOURCES.GT_REACT_CLIENT)).toBe(true);
+    expect(isGTReactImportSource(GT_IMPORT_SOURCES.GT_NEXT)).toBe(false);
   });
 });

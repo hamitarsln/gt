@@ -54,6 +54,7 @@ export function processProgram({
         const injectedPath = injectRuntimeTranslateImport(path, {
           needsString,
           needsJsx,
+          importSource: state.settings.gtReactImportSource,
         });
         if (injectedPath) {
           importAnchor.path = injectedPath;

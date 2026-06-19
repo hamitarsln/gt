@@ -11,7 +11,15 @@ import {
  */
 export function injectRuntimeTranslateImport(
   path: NodePath<t.Program>,
-  { needsString, needsJsx }: { needsString: boolean; needsJsx: boolean }
+  {
+    needsString,
+    needsJsx,
+    importSource = GT_IMPORT_SOURCES.GT_REACT,
+  }: {
+    needsString: boolean;
+    needsJsx: boolean;
+    importSource?: 'gt-react' | 'gt-react/browser';
+  }
 ): NodePath<t.ImportDeclaration> | null {
   const specifiers: t.ImportSpecifier[] = [];
 
@@ -29,7 +37,7 @@ export function injectRuntimeTranslateImport(
 
   const importDecl = t.importDeclaration(
     specifiers,
-    t.stringLiteral(GT_IMPORT_SOURCES.GT_REACT)
+    t.stringLiteral(importSource)
   );
 
   const [inserted] = path.unshiftContainer('body', importDecl);

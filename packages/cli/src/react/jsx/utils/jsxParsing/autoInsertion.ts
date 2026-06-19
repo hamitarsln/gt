@@ -21,6 +21,7 @@ import {
   BRANCH_COMPONENT,
   PLURAL_COMPONENT,
   DEFAULT_GT_IMPORT_SOURCE,
+  LEGACY_GT_IMPORT_SOURCE,
   DERIVE_COMPONENT,
   BRANCH_CONTROL_PROPS,
   PLURAL_CONTROL_PROPS,
@@ -45,7 +46,8 @@ export function isAutoInserted(node: t.Node): boolean {
  */
 export function ensureTAndVarImported(
   ast: t.File,
-  importAliases: Record<string, string>
+  importAliases: Record<string, string>,
+  options: { legacyGtReactImportSource?: boolean } = {}
 ): void {
   // Check if internal components are already imported
   const hasInternalT = Object.values(importAliases).includes(
@@ -80,7 +82,11 @@ export function ensureTAndVarImported(
 
   const importDecl = t.importDeclaration(
     specifiers,
-    t.stringLiteral(DEFAULT_GT_IMPORT_SOURCE)
+    t.stringLiteral(
+      options.legacyGtReactImportSource
+        ? LEGACY_GT_IMPORT_SOURCE
+        : DEFAULT_GT_IMPORT_SOURCE
+    )
   );
 
   traverse(ast, {

@@ -58,6 +58,11 @@ export type GTConfig = {
          * - `{ strings?: boolean; jsx?: boolean }` enables selectively
          */
         devHotReload?: boolean | { strings?: boolean; jsx?: boolean };
+        /**
+         * Compiler compatibility flag for apps pinned to gt-react versions that
+         * still require compiler-injected internals from gt-react/browser.
+         */
+        legacyGtReactImportSource?: boolean;
       };
     };
   };

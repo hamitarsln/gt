@@ -109,6 +109,7 @@ export async function createInlineUpdates(
             pkgs,
             file,
             includeSourceCodeContext: parsingFlags.includeSourceCodeContext,
+            legacyGtReactImportSource: parsingFlags.legacyGtReactImportSource,
             autoderive: autoderive.jsx,
           },
           output: {
@@ -128,7 +129,9 @@ export async function createInlineUpdates(
         }
 
         // Ensure GtInternalTranslateJsx and GtInternalVar are imported in the AST
-        ensureTAndVarImported(ast, importAliases);
+        ensureTAndVarImported(ast, importAliases, {
+          legacyGtReactImportSource: parsingFlags.legacyGtReactImportSource,
+        });
 
         // Insert T/Var into the AST
         autoInsertJsxComponents(ast, importAliases);
@@ -171,6 +174,7 @@ export async function createInlineUpdates(
               file,
               includeSourceCodeContext: parsingFlags.includeSourceCodeContext,
               enableAutoJsxInjection: true,
+              legacyGtReactImportSource: parsingFlags.legacyGtReactImportSource,
               autoderive: autoderive.jsx,
             },
             output: {

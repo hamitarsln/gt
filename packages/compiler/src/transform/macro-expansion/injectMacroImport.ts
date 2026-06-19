@@ -8,12 +8,15 @@ import {
 /**
  * Inject `import { t } from 'gt-react'` as the first statement in the program.
  */
-export function injectMacroImport(path: NodePath<t.Program>): void {
+export function injectMacroImport(
+  path: NodePath<t.Program>,
+  importSource: 'gt-react' | 'gt-react/browser' = GT_IMPORT_SOURCES.GT_REACT
+): void {
   const tName = GT_OTHER_FUNCTIONS.t;
 
   const importDecl = t.importDeclaration(
     [t.importSpecifier(t.identifier(tName), t.identifier(tName))],
-    t.stringLiteral(GT_IMPORT_SOURCES.GT_REACT)
+    t.stringLiteral(importSource)
   );
 
   path.unshiftContainer('body', importDecl);

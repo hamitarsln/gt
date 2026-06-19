@@ -17,7 +17,7 @@ function transform(
   code: string,
   overrides: Record<string, unknown> = {}
 ): TransformResult {
-  const state = initializeState({}, 'test.tsx');
+  const state = initializeState(overrides, 'test.tsx');
   Object.assign(state.settings, overrides);
   const ast = parser.parse(code, {
     sourceType: 'module',
@@ -205,6 +205,14 @@ describe('macroExpansionPass', () => {
     expect(gtImport).toBeDefined();
   });
 
+  it('can add legacy gt-react/browser auto-import', () => {
+    const { imports } = transform('const x = t`hello`;', {
+      legacyGtReactImportSource: true,
+    });
+    const gtImport = imports.find((i) => i.source.value === 'gt-react/browser');
+    expect(gtImport).toBeDefined();
+  });
+
   it('does NOT add auto-import when no macros are found', () => {
     const { imports } = transform('const x = t("hello");');
     const gtImport = imports.find((i) => i.source.value === 'gt-react');
@@ -227,6 +235,18 @@ describe('macroExpansionPass', () => {
       "import { t } from 'gt-react';\nconst x = t`hello ${name}`;"
     );
     const gtImports = imports.filter((i) => i.source.value === 'gt-react');
+    expect(gtImports).toHaveLength(1);
+    expect(tCalls).toHaveLength(1);
+    expect(getMessageString(tCalls[0])).toBe('hello {0}');
+  });
+
+  it('transforms t imported from legacy gt-react/browser', () => {
+    const { tCalls, imports } = transform(
+      "import { t } from 'gt-react/browser';\nconst x = t`hello ${name}`;"
+    );
+    const gtImports = imports.filter(
+      (i) => i.source.value === 'gt-react/browser'
+    );
     expect(gtImports).toHaveLength(1);
     expect(tCalls).toHaveLength(1);
     expect(getMessageString(tCalls[0])).toBe('hello {0}');

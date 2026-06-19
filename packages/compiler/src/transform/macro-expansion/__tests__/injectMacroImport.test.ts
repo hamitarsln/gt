@@ -45,4 +45,14 @@ describe('injectMacroImport', () => {
       GT_IMPORT_SOURCES.GT_REACT
     );
   });
+
+  it('supports legacy gt-react/browser import source', () => {
+    const { programPath } = parseAndGetProgramPath('const x = 1;');
+    injectMacroImport(programPath, GT_IMPORT_SOURCES.GT_REACT_BROWSER);
+    const firstStmt = programPath.node.body[0];
+    expect(t.isImportDeclaration(firstStmt)).toBe(true);
+    expect((firstStmt as t.ImportDeclaration).source.value).toBe(
+      GT_IMPORT_SOURCES.GT_REACT_BROWSER
+    );
+  });
 });

@@ -48,6 +48,7 @@ type ConfigFileShape = {
     gt?: {
       parsingFlags?: {
         autoderive?: AutoderiveConfig;
+        legacyGtReactImportSource?: boolean;
       };
     };
   };

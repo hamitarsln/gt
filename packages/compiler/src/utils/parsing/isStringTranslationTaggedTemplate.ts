@@ -1,6 +1,6 @@
 import type { NodePath } from '@babel/traverse';
 import * as t from '@babel/types';
-import { GT_IMPORT_SOURCES } from '../constants/gt/constants';
+import { isGTReactImportSource } from '../constants/gt/helpers';
 
 /**
  * Checks whether a tagged template expression should be treated as the GT
@@ -31,6 +31,6 @@ export function isStringTranslationTaggedTemplate(
   const importDecl = binding.path.parentPath;
   return (
     importDecl?.isImportDeclaration() === true &&
-    importDecl.node.source.value === GT_IMPORT_SOURCES.GT_REACT
+    isGTReactImportSource(importDecl.node.source.value)
   );
 }

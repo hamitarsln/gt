@@ -8,7 +8,10 @@ import { macroExpansionPass } from '../macroExpansionPass';
 import { runtimeTranslatePass } from '../runtimeTranslatePass';
 import { injectionPass } from '../injectionPass';
 import { initializeState } from '../../state/utils/initializeState';
-import { GT_OTHER_FUNCTIONS } from '../../utils/constants/gt/constants';
+import {
+  GT_IMPORT_SOURCES,
+  GT_OTHER_FUNCTIONS,
+} from '../../utils/constants/gt/constants';
 import { resolveDevHotReload } from '../../config';
 
 // --- Helpers ---
@@ -363,6 +366,21 @@ describe('runtimeTranslatePass', () => {
       );
     });
 
+    it('can inject legacy gt-react/browser imports', () => {
+      const { imports } = transform(
+        `
+          ${USEGT_SETUP}
+          const msg = t("Hello");
+        `,
+        { legacyGtReactImportSource: true }
+      );
+
+      const specifiers = getImportSpecifiers(imports, 'gt-react/browser');
+      expect(specifiers).toContain(
+        GT_OTHER_FUNCTIONS.GtInternalRuntimeTranslateString
+      );
+    });
+
     it('does not duplicate import if GtInternalRuntimeTranslateString already imported', () => {
       const { imports } = transform(`
         import { useGT } from 'gt-react';
@@ -454,6 +472,47 @@ describe('runtimeTranslatePass', () => {
         strings: false,
         jsx: true,
       });
+    });
+
+    it('resolves legacy gt-react import source from gtConfig', () => {
+      const state = initializeState(
+        {
+          gtConfig: {
+            files: {
+              gt: {
+                parsingFlags: {
+                  legacyGtReactImportSource: true,
+                },
+              },
+            },
+          },
+        },
+        'test.tsx'
+      );
+      expect(state.settings.gtReactImportSource).toBe(
+        GT_IMPORT_SOURCES.GT_REACT_BROWSER
+      );
+    });
+
+    it('lets explicit legacy import option override gtConfig', () => {
+      const state = initializeState(
+        {
+          legacyGtReactImportSource: false,
+          gtConfig: {
+            files: {
+              gt: {
+                parsingFlags: {
+                  legacyGtReactImportSource: true,
+                },
+              },
+            },
+          },
+        },
+        'test.tsx'
+      );
+      expect(state.settings.gtReactImportSource).toBe(
+        GT_IMPORT_SOURCES.GT_REACT
+      );
     });
   });
 

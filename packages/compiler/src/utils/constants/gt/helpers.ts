@@ -161,7 +161,22 @@ export function isGTImportSource(name: string): name is GT_IMPORT_SOURCES {
       GT_IMPORT_SOURCES.GT_NEXT,
       GT_IMPORT_SOURCES.GT_NEXT_SERVER,
       GT_IMPORT_SOURCES.GT_REACT,
+      GT_IMPORT_SOURCES.GT_REACT_CLIENT,
+      GT_IMPORT_SOURCES.GT_REACT_BROWSER,
       GT_IMPORT_SOURCES.GT_I18N,
+    ] as string[]
+  ).includes(name);
+}
+
+/**
+ * Check if it's a gt-react import source.
+ */
+export function isGTReactImportSource(name: string): boolean {
+  return (
+    [
+      GT_IMPORT_SOURCES.GT_REACT,
+      GT_IMPORT_SOURCES.GT_REACT_CLIENT,
+      GT_IMPORT_SOURCES.GT_REACT_BROWSER,
     ] as string[]
   ).includes(name);
 }

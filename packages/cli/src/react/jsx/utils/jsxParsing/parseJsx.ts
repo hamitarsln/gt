@@ -102,6 +102,7 @@ type ConfigOptions = {
   file: string;
   includeSourceCodeContext?: boolean;
   enableAutoJsxInjection?: boolean;
+  legacyGtReactImportSource?: boolean;
   autoderive?: boolean;
 };
 
@@ -1050,7 +1051,9 @@ function processFunctionInFile({
     // Auto-inject T/Var into the cross-file AST when enabled,
     // so that Derive extraction sees the same structure as same-file
     if (config.enableAutoJsxInjection) {
-      ensureTAndVarImported(ast, importAliases);
+      ensureTAndVarImported(ast, importAliases, {
+        legacyGtReactImportSource: config.legacyGtReactImportSource,
+      });
       autoInsertJsxComponents(ast, importAliases);
     }
 
@@ -1086,6 +1089,7 @@ function processFunctionInFile({
               pkgs: config.pkgs,
               file: filePath,
               enableAutoJsxInjection: config.enableAutoJsxInjection,
+              legacyGtReactImportSource: config.legacyGtReactImportSource,
             },
             state: {
               ...state,
@@ -1113,6 +1117,7 @@ function processFunctionInFile({
               pkgs: config.pkgs,
               file: filePath,
               enableAutoJsxInjection: config.enableAutoJsxInjection,
+              legacyGtReactImportSource: config.legacyGtReactImportSource,
             },
             state: {
               ...state,
@@ -1167,6 +1172,7 @@ function processFunctionInFile({
               pkgs: config.pkgs,
               file: filePath,
               enableAutoJsxInjection: config.enableAutoJsxInjection,
+              legacyGtReactImportSource: config.legacyGtReactImportSource,
             },
             state: {
               ...state,

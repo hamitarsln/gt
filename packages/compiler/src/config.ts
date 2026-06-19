@@ -13,6 +13,7 @@ type GTConfig = {
       parsingFlags?: {
         enableAutoJsxInjection?: boolean;
         autoderive?: boolean | { jsx?: boolean; strings?: boolean };
+        legacyGtReactImportSource?: boolean;
         /** Dev hot reload: inject runtime translate calls and enable Suspense-based <T> */
         devHotReload?: boolean | { strings?: boolean; jsx?: boolean };
       };
@@ -40,6 +41,8 @@ export interface PluginConfig {
   enableAutoJsxInjection?: boolean;
   /** Automatically treat interpolated/concatenated values as derive() calls */
   autoderive?: boolean | { jsx?: boolean; strings?: boolean };
+  /** Emit internal imports from gt-react/browser for compatibility with older gt-react versions */
+  legacyGtReactImportSource?: boolean;
   /** Debug: write a hash → jsxChildren manifest file on build */
   _debugHashManifest?: boolean;
   /** Dev hot reload: inject runtime translate calls and enable Suspense-based <T> */
@@ -64,6 +67,8 @@ export interface PluginSettings {
   enableAutoJsxInjection: boolean;
   /** Automatically treat interpolated/concatenated values as derive() calls */
   autoderive: { jsx: boolean; strings: boolean };
+  /** Import source used for compiler-injected gt-react runtime imports */
+  gtReactImportSource?: 'gt-react' | 'gt-react/browser';
   /** Debug: write a hash → jsxChildren manifest file on build */
   _debugHashManifest: boolean;
   /** Dev hot reload: inject runtime translate calls and enable Suspense-based <T> */
@@ -98,4 +103,10 @@ export function resolveDevHotReload(
     return { strings: !!value, jsx: false };
   }
   return { strings: value.strings ?? false, jsx: value.jsx ?? false };
+}
+
+export function resolveGtReactImportSource(
+  legacyGtReactImportSource: boolean | undefined
+): 'gt-react' | 'gt-react/browser' {
+  return legacyGtReactImportSource ? 'gt-react/browser' : 'gt-react';
 }
